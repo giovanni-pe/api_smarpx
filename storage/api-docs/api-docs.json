@@ -1,0 +1,537 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dog Walker API",
+        "description": "Documentación de la API para gestión de clientes, paseadores y admins.",
+        "contact": {
+            "email": "soporte@dogwalker.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar un nuevo usuario",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "juan@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "client"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado correctamente"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "juan@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token de acceso generado"
+                    },
+                    "401": {
+                        "description": "Credenciales inválidas"
+                    }
+                }
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "Usuario"
+                ],
+                "summary": "Obtener el perfil del usuario autenticado",
+                "operationId": "d32e56b6274eb68e980da6d91fbe9fd8",
+                "responses": {
+                    "200": {
+                        "description": "Perfil del usuario"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Cerrar sesión",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Sesión cerrada correctamente"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/clients": {
+            "post": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Register a client",
+                "operationId": "f1e86e5b79fedfa6593067977292b13b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+51999999999"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Lima, Peru"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Client created"
+                    }
+                }
+            }
+        },
+        "/api/contact": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Submit contact message from the website",
+                "operationId": "44af03d64ebf32678085eef0afec7ad0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "subject",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "María"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "maria@example.com"
+                                    },
+                                    "subject": {
+                                        "type": "string",
+                                        "example": "Pregunta sobre paseos"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": "¿Cuánto cuesta un paseo individual?"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Message received"
+                    }
+                }
+            }
+        },
+        "/api/dogs": {
+            "post": {
+                "tags": [
+                    "Dogs"
+                ],
+                "summary": "Register a dog and assign to client",
+                "operationId": "4880742d3cdf4092b2a220082d614c24",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "breed",
+                                    "age",
+                                    "energy_level",
+                                    "client_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Toby"
+                                    },
+                                    "breed": {
+                                        "type": "string",
+                                        "example": "Labrador"
+                                    },
+                                    "age": {
+                                        "type": "string",
+                                        "example": "3 years"
+                                    },
+                                    "size": {
+                                        "type": "string",
+                                        "example": "Medium"
+                                    },
+                                    "energy_level": {
+                                        "type": "string",
+                                        "enum": [
+                                            "low",
+                                            "medium",
+                                            "high"
+                                        ]
+                                    },
+                                    "photo": {
+                                        "type": "file"
+                                    },
+                                    "client_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Dog created and linked to client"
+                    }
+                }
+            }
+        },
+        "/api/reservations": {
+            "post": {
+                "tags": [
+                    "Walk Reservations"
+                ],
+                "summary": "Create a walk reservation",
+                "operationId": "56966f95dc2e86f7e65a1b2678f6c7b7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_id",
+                                    "dog_id",
+                                    "reservation_date",
+                                    "reservation_time"
+                                ],
+                                "properties": {
+                                    "client_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "dog_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "walker_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "reservation_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-05-01"
+                                    },
+                                    "reservation_time": {
+                                        "type": "string",
+                                        "example": "14:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Reservation created"
+                    }
+                }
+            }
+        },
+        "/api/walk-reservations/demo": {
+            "post": {
+                "tags": [
+                    "Walk Reservations"
+                ],
+                "summary": "Crear una reserva demo con nuevo cliente y perro",
+                "operationId": "a9c561b2b68387f69e758b1a612d8f2d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "dog_name",
+                                    "dog_breed",
+                                    "dog_age",
+                                    "dog_energy"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juan@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+51 999 999 999"
+                                    },
+                                    "dog_name": {
+                                        "type": "string",
+                                        "example": "Toby"
+                                    },
+                                    "dog_breed": {
+                                        "type": "string",
+                                        "example": "Labrador"
+                                    },
+                                    "dog_age": {
+                                        "type": "string",
+                                        "example": "3 años"
+                                    },
+                                    "dog_energy": {
+                                        "type": "string",
+                                        "enum": [
+                                            "low",
+                                            "medium",
+                                            "high"
+                                        ],
+                                        "example": "medium"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reserva demo creada con éxito",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "¡Reserva demo creada con éxito! Pronto nos pondremos en contacto contigo."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    },
+                    "500": {
+                        "description": "Error del servidor"
+                    }
+                }
+            }
+        },
+        "/api/walkers": {
+            "get": {
+                "tags": [
+                    "Walkers"
+                ],
+                "summary": "Get all available walkers with rating and photo",
+                "operationId": "16a88a43fad31405a1dc062d5f0ed33e",
+                "responses": {
+                    "200": {
+                        "description": "List of walkers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "walker_id": {
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "experience": {
+                                                "type": "string"
+                                            },
+                                            "photo_url": {
+                                                "type": "string"
+                                            },
+                                            "rating": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "total_reviews": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Autenticación"
+        },
+        {
+            "name": "Usuario",
+            "description": "Usuario"
+        },
+        {
+            "name": "Clients",
+            "description": "Clients"
+        },
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
+        {
+            "name": "Dogs",
+            "description": "Dogs"
+        },
+        {
+            "name": "Walk Reservations",
+            "description": "Walk Reservations"
+        },
+        {
+            "name": "Walkers",
+            "description": "Walkers"
+        }
+    ]
+}
