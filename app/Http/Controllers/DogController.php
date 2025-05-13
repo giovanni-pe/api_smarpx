@@ -4,36 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Dog;
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DogController extends Controller
 {
-    /**
-     * @OA\Post(
-     *     path="/api/dogs",
-     *     summary="Register a dog and assign to client",
-     *     tags={"Dogs"},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"name", "breed", "age", "energy_level", "client_id"},
-     *                 @OA\Property(property="name", type="string", example="Toby"),
-     *                 @OA\Property(property="breed", type="string", example="Labrador"),
-     *                 @OA\Property(property="age", type="string", example="3 years"),
-     *                 @OA\Property(property="size", type="string", example="Medium"),
-     *                 @OA\Property(property="energy_level", type="string", enum={"low","medium","high"}),
-     *                 @OA\Property(property="photo", type="file"),
-     *                 @OA\Property(property="client_id", type="integer", example=1)
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Dog created and linked to client")
-     * )
-     */
 
-    public function store(Request $request)
+    public function index(Request $request)
+    {
+        // Obtener el usuario autenticado
+        $user = $request->user();
+
+        // Obtener el cliente asociado al usuario autenticado
+        $client = $user->clients()->first();
+
+        // Verificamos si el usuario está asociado a un cliente
+        if (!$client) {
+            return response()->json(['error' => 'No se encontró un cliente asociado a este usuario'], 403);
+        }
+
+        // Filtros
+        $query = $client->dogs();
+
+        if ($request->has('name') && $request->name != '') {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('age') && $request->age != '') {
+            $query->where('age', $request->age);
+        }
+
+        // Paginación
+        $dogs = $query->paginate(10); // Cambia 10 por la cantidad que desees por página
+
+        return response()->json($dogs);
+    }
+
+
+    public function storeWhitoutUser(Request $request)
     {
         $request->validate([
             'name'         => 'required|string',
@@ -63,5 +71,57 @@ class DogController extends Controller
         $dog->owners()->attach($request->client_id);
 
         return response()->json(['dog' => $dog], 201);
+    }
+    public function store(Request $request)
+    {
+        try {
+            // Obtener el usuario autenticado
+            $user = $request->user();
+
+            // Obtener el cliente asociado al usuario autenticado
+            $client = $user->clients()->first();
+
+            // Verificamos si el usuario está asociado a un cliente
+            if (!$client) {
+                return response()->json(['error' => 'No se encontró un cliente asociado a este usuario'], 403);
+            }
+
+            // Validación de los datos del perro
+            $request->validate([
+                'name'         => 'required|string',
+                'breed'        => 'required|string',
+                'age'          => 'required|string',
+                'size'         => 'nullable|string',
+                'energy_level' => 'required|in:low,medium,high',
+            ]);
+
+            $photoUrl = null;
+            if ($request->hasFile('photo')) {
+                // Guardar la foto del perro
+                $photoPath = $request->file('photo')->store('uploads/dogs', 'public');
+                $photoUrl = '/storage/' . $photoPath;
+            }
+
+            // Crear el perro y asociarlo al cliente autenticado
+            $dog = Dog::create([
+                'name'         => $request->name,
+                'breed'        => $request->breed,
+                'age'          => $request->age,
+                'size'         => $request->size,
+                'energy_level' => $request->energy_level,
+                'photo_url'    => $photoUrl,
+            ]);
+
+            // Asociar el perro al cliente mediante la tabla pivot
+            $dog->clients()->attach($client->id);
+
+            // Retornar respuesta exitosa con los datos del perro
+            return response()->json(['dog' => $dog], 201);
+        } catch (\Exception $e) {
+            // Si ocurre un error, capturarlo y devolver una respuesta de error
+            return response()->json([
+                'error' => 'Hubo un error al registrar el perro: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
@@ -46,5 +46,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'user_client', 'user_id', 'client_id');
+    }
+    public function walkers()
+    {
+        return $this->belongsToMany(Walker::class, 'user_walker', 'user_id', 'walker_id');
     }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Confirmación de contacto</title>
@@ -90,34 +91,22 @@
         }
     </style>
 </head>
+
 <body>
     <div class="email-wrapper">
         <div class="email-header">
-            <h1>Tu mensaje ha sido recibido con éxito</h1>
+            <h1>Confirmación SmartpX</h1>
         </div>
 
         <div class="email-body">
-            <h2>Hola {{ $data['name'] }} <span class="emoji">🐾</span></h2>
-
-            <p>Gracias por dar el primer paso hacia una vida más feliz para tu mejor amigo.</p>
-
-            <p>En <strong>SmartPx</strong> no solo caminamos perros…</p>
-            <blockquote>Nos aseguramos de que cada paseo sea una experiencia saludable, divertida y diseñada especialmente para tu peludo.</blockquote>
-
-            <p>Hemos recibido tu mensaje y ya estamos moviendo colas de emoción por ayudarte. Un miembro de nuestro equipo se pondrá en contacto contigo muy pronto.</p>
-
-            <p>✨ Tu confianza significa mucho. Estás más cerca de darle a tu perro lo que se merece: <strong>una vida activa, plena y guiada por tecnología de bienestar.</strong></p>
-
-            <p>Nos emociona acompañarte en este viaje hacia una experiencia canina superior.</p>
+            <h2>Saludos cordiales {{ $data['name'] }} <span class="emoji">🐾</span></h2>
+            <blockquote>Hemos recibido tu mensaje y ya estamos moviendo colas de emoción por ayudarte. Un miembro de
+                nuestro equipo se pondrá en contacto contigo muy pronto.</blockquote>
         </div>
-
         <div class="email-footer">
-            <p class="branding">SmartPx — Paseos inteligentes para tu perro</p>
-            <p>
-                <a href="https://smartpx.org">smartpx.org</a> |
-                smartpetsxplore@gmail.com
-            </p>
+            <p class="branding">SmartPx — Smart Pets Xplore</p>
         </div>
     </div>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +10,7 @@ class Dog extends Model
         'name', 'breed', 'age', 'size', 'energy_level', 'photo_url'
     ];
 
-    public function owners()
+    public function clients()
     {
         return $this->belongsToMany(Client::class, 'client_dog', 'dog_id', 'client_id');
     }
