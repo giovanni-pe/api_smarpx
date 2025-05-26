@@ -18,10 +18,10 @@ return new class extends Migration
             $table->foreignId('walker_id')->nullable()->constrained('walkers')->onDelete('set null');
             $table->date('reservation_date');
             $table->time('reservation_time');
-            $table->enum('status', ['pending', 'confirmed', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'completed', 'in_progress','cancelled'])->default('pending');
             $table->timestamps();
         });
-        
+
     }
 
     /**

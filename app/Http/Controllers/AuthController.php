@@ -11,45 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @OA\Info(
- *     version="1.0.0",
- *     title="Dog Walker API",
- *     description="Documentación de la API para gestión de clientes, paseadores y admins.",
- *     @OA\Contact(
- *         email="soporte@dogwalker.com"
- *     )
- * )
- *
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT"
- * )
- */
+
 class AuthController extends Controller
 {
-    /**
-     * @OA\Post(
-     *     path="/api/register",
-     *     summary="Registrar un nuevo usuario",
-     *     tags={"Autenticación"},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"name", "email", "password", "password_confirmation", "role"},
-     *             @OA\Property(property="name", type="string", example="Juan Pérez"),
-     *             @OA\Property(property="email", type="string", example="juan@example.com"),
-     *             @OA\Property(property="password", type="string", example="secret123"),
-     *             @OA\Property(property="password_confirmation", type="string", example="secret123"),
-     *             @OA\Property(property="role", type="string", example="client")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Usuario registrado correctamente"),
-     *     @OA\Response(response=422, description="Errores de validación")
-     * )
-     */
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -129,15 +94,7 @@ class AuthController extends Controller
         // Retornar la respuesta con los datos del perfil
         return response()->json($response);
     }
-    /**
-     * @OA\Get(
-     *     path="/api/profile",
-     *     summary="Obtener el perfil del usuario autenticado",
-     *     tags={"Usuario"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Perfil del usuario")
-     * )
-     */
+
     public function profile(Request $request)
     {
         $user = $request->user();
@@ -148,15 +105,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/logout",
-     *     summary="Cerrar sesión",
-     *     tags={"Autenticación"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Sesión cerrada correctamente")
-     * )
-     */
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
