@@ -84,3 +84,12 @@ Route::middleware('auth:api')->group(function () {
 // Estadísticas simples del paseador
 Route::get('/walkers/{walkerId}/simple-stats', [WalkerController::class, 'getSimpleStats']);
 Route::get('/walkers/{walkerId}/monthly-chart', [WalkerController::class, 'getMonthlyChart']);
+
+
+
+
+
+// Rutas para eliminación de cuenta
+Route::post('/request-account-deletion', [UserController::class, 'requestAccountDeletion']);
+Route::post('/delete-account', [UserController::class, 'deleteAccount']);
+Route::post('/get-account-data', [UserController::class, 'getAccountData']);

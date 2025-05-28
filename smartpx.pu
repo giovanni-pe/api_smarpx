@@ -1,0 +1,39 @@
+@startuml
+!define RECTANGLE class
+skinparam rectangle {
+  BackgroundColor #F8F8F8
+  BorderColor black
+  FontSize 12
+}
+skinparam component {
+  BackgroundColor #E0F7FA
+  BorderColor black
+}
+
+cloud "Google Cloud Platform (GCP)\nServidor: e2-medium\n$25 USD/mes\n4GB RAM, 2 vCPU Xeon\n~1000 req/s" as gcloud {
+
+    node "Instancia VM con Docker" as dockerHost {
+        [Proxy Reverso (Nginx/Traefik)] as proxy
+        [smartpx-db\n(Base de Datos)] as db
+        [smartpx-app\n(API Backend)] as api
+        [RabbitMQ\n(Broker de eventos)] as mq
+    }
+}
+
+cloud "Cloudflare CDN\nDominio: smartpx.org" as cloudflare
+
+package "Cliente" {
+    [Web SPA\nsmartpx.org] as web
+    [Aplicación SmartPx\n(Móvil/Desktop)] as mobile
+}
+
+cloudflare --> proxy : HTTPS (443)
+proxy --> api : HTTP Interno (REST / WebSocket)
+web --> proxy : HTTPS (vía Cloudflare)
+mobile --> proxy : HTTPS (vía Cloudflare)
+
+mobile --> mq : Suscripción MQ (WebSocket / AMQP)
+api --> db : Conexión SQL
+api --> mq : Publicación MQ
+
+@enduml
